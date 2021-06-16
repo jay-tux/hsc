@@ -5,12 +5,12 @@
 #include <functional>
 
 namespace hscpp {
-  template <template <typename> typename Self, typename a>
+  template <template <typename, typename ...> typename Self, typename a, typename ... rest>
   class Functor {
   public:
     template <typename b>
-    Self<b> fmap(const std::function<b(a)> f) {
-      return (static_cast<Self<a> &>(*this)).fmap_impl(f);
+    Self<b, rest ...> fmap(const std::function<b(a)> f) {
+      return (static_cast<Self<a, rest ...> &>(*this)).fmap_impl(f);
     }
   };
 }

@@ -147,28 +147,28 @@ All the type classes are simply abstract classes. Many type classes use the CRTP
 - Own functions:
   - `static Self read(const hsString &value)`: Converts a string back to the original type.
 
-*`template <template <typename> typename Self, typename a> class Functor<Self, a>`* ![functor.hpp]
+*`template <template <typename, typename ...> typename Self, typename a, typename ... rest> class Functor<Self, a>`* ![functor.hpp]
 - Implementation requirements:
-  - `Self<a>` should contain `Self<b> fmap_impl(const std::function<b(a)> f)`.
+  - `Self<a, rest ...>` should contain `Self<b rest ...> fmap_impl(const std::function<b(a)> f)`.
 - Own functions:
-  - `Self<b> fmap(const std::function<b(a)> f)`: Maps over a functor.
+  - `Self<b, rest ...> fmap(const std::function<b(a)> f)`: Maps over a functor.
 
-*`template <template <typename> typename Self, typename a> class Applicative<Self, a>`* ![applicative.hpp]
+*`template <template <typename, typename ...> typename Self, typename a, typename ... rest> class Applicative<Self, a>`* ![applicative.hpp]
 - Implementation requirements:
-  - `Self<a>` should inherit from `Functor<Self, a>`.
-  - `Self<a>` should contain `static Self<a> pure(a val)`.
-  - `Self<a>` should contain `Self<b> ap_impl(const Self<std::function<b(a)>> func)`.
+  - `Self<a, rest ...>` should inherit from `Functor<Self, a, rest ...>`.
+  - `Self<a, rest ...>` should contain `static Self<a, rest ...> pure(a val)`.
+  - `Self<a, rest ...>` should contain `Self<b, rest ...> ap_impl(const Self<std::function<b(a)>, rest ...> func)`.
 - Own functions:
-  - `static Self<a> pure(a val)`: Wraps a value in the Applicative.
-  - `Self<b> ap(const Self<std::function<b(a)>> func)`: Applies sequentially.
+  - `static Self<a, rest ...> pure(a val)`: Wraps a value in the Applicative.
+  - `Self<b, rest ...> ap(const Self<std::function<b(a)>, rest ...> func)`: Applies sequentially.
 
-*`template <template <typename> typename Self, typename a> class Monad<Self, a>`* ![monad.hpp]
+*`template <template <typename, typename ...> typename Self, typename a, typename ... rest> class Monad<Self, a>`* ![monad.hpp]
 - Implementation requirements:
-  - `Self<a>` should inherit from `Applicative<Self, a>`.
-  - `Self<a>` should contain `Self<b> bind_impl(const std::function<Self<b>(a)> f)`.
+  - `Self<a, rest ...>` should inherit from `Applicative<Self, a, rest ...>`.
+  - `Self<a, rest ...>` should contain `Self<b, rest ...> bind_impl(const std::function<Self<b, rest ...>(a)> f)`.
 - Own functions:
-  - `static Self<a> ret(a val)`: Wraps a value in the Monad.
-  - `Self<b> bind(const std::function<Self<b>(a)> f)`: Composes two actions
+  - `static Self<a, rest ...> ret(a val)`: Wraps a value in the Monad.
+  - `Self<b, rest ...> bind(const std::function<Self<b, rest ...>(a)> f)`: Composes two actions
 
 ## Free functions
 *`hsString show(hsInt val):`* ![_show_basic.hpp]  

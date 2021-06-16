@@ -5,14 +5,14 @@
 #include <functional>
 
 namespace hscpp {
-  template <template <typename> typename Self, typename a>
+  template <template <typename, typename ...> typename Self, typename a, typename ... rest>
   class Monad : public Applicative<Self, a> {
   public:
-    Self<a> ret(a val) { return Self<a>::pure(val); }
+    Self<a, rest ...> ret(a val) { return Self<a, rest ...>::pure(val); }
 
     template <typename b>
-    Self<b> bind(const std::function<Self<b>(a)> f) {
-      return (static_cast<Self<a> &>(*this)).bind_impl(f);
+    Self<b, rest ...> bind(const std::function<Self<b, rest ...>(a)> f) {
+      return (static_cast<Self<a, rest ...> &>(*this)).bind_impl(f);
     }
   };
 }

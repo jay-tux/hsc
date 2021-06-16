@@ -6,14 +6,14 @@
 #include <functional>
 
 namespace hscpp {
-  template <template <typename> typename Self, typename a>
+  template <template <typename, typename ...> typename Self, typename a, typename ... rest>
   class Applicative : public Functor<Self, a> {
   public:
-    static Self<a> pure(a val) { return Self<a>::pure(val); }
+    static Self<a, rest ...> pure(a val) { return Self<a, rest ...>::pure(val); }
 
     template <typename b>
-    Self<b> ap(const Self<std::function<b(a)>> func) {
-      return (static_cast<Self<a> &>(*this)).ap_impl(func);
+    Self<b, rest ...> ap(const Self<std::function<b(a)>, rest ...> func) {
+      return (static_cast<Self<a, rest ...> &>(*this)).ap_impl(func);
     }
   };
 }
