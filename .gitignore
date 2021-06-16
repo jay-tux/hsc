@@ -1,3 +1,11 @@
-*/obj/*
-*/bin/*
-*/lib/*
+c/ex/bin/*
+c/lib/*
+c/obj/*
+c/test/bin/*
+c/test/obj/*
+
+c++/ex/bin/*
+c++/lib/*
+c++/obj/*
+c++/test/bin/*
+c++/test/obj/*
