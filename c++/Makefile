@@ -28,6 +28,11 @@ clean:
 	rm -f lib/*
 	rm -f obj/*
 
+install: lib/libhsc++.so
+	sudo cp lib/libhsc++.so /usr/lib
+	if [ ! -d /usr/include/hsc/ ]; then sudo mkdir /usr/include/hsc/; fi
+	sudo cp inc/* /usr/include/hsc/
+
 lib/libhsc++.so: $(OBJS)
 	$(CC) $(OBJS) $(LDARGS) -o $@
 
