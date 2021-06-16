@@ -1,0 +1,7 @@
+#include "types.hpp"
+#include "functor.hpp"
+#include "applicative.hpp"
+#include "monad.hpp"
+#include "list.hpp"
+#include "string.hpp"
+#include "showread.hpp"

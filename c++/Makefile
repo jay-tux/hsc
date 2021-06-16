@@ -1,29 +1,37 @@
 CC=g++
 MAKE=make
-CCARGS=-Wall -Wextra -pedantic -g -c -fPIC -MMD
+CCARGS=-Wall -Wextra -pedantic -g -c -fPIC -MMD -I ./inc/ -std=c++17
 LDARGS=-shared
+SRCS=$(shell find src/ -name '*.cpp')
+OBJS=$(SRCS:src/%.cpp=obj/%.o)
+DEPS=$(OBJS:.o=.d)
+-include $(DEPS)
 
-SRCDIR=./src/
-INCDIR=./inc/
-OBJDIR=./obj/
-LIBDIR=./lib/
-EXDIR=./ex/
-TESTDIR=./test/
+all: lib/libhsc++.so
 
-all: $(LIBDIR)/libhsc++.so
+empty:
+	@echo $(SRCS)
+	@echo $(OBJS)
+	@echo $(DEPS)
 
 examples:
-	$(MAKE) -c $(EXDIR)
+	$(MAKE) -C ex/
 
 tests:
-	$(MAKE) -c $(TESTDIR)
+	$(MAKE) -C test/
 
 runtests:
 	$(MAKE) tests
 	$(TESTDIR)/bin/all
 
-$(LIBDIR)/libhsc++.so: $(OBJECTS)
-	$(CC) $(OBJECTS) $(LDARGS) -o $@
+clean:
+	rm -f lib/*
+	rm -f obj/*
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp Makefile
+lib/libhsc++.so: $(OBJS)
+	$(CC) $(OBJS) $(LDARGS) -o $@
+
+obj/%.o: src/%.cpp Makefile
 	$(CC) $(CCARGS) $< -o $@
+
+.PHONY: all examples tests runtests clean empty
