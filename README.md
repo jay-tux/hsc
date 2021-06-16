@@ -17,7 +17,7 @@ HSC++ uses GNU Make/G++ for compilation and compiles down to a shared library (`
    - `hsDouble` (for C/C++'s `double`, Haskell's `Double`)
    - `hsChar` (for C/C++'s `char`, Haskell's `Char`)
  - Show and Read type classes.
-   - Limitation: due to circular dependencies, the basic data types are not Show. There exists, however, have a `show` method that takes any of them and returns a `hsString` (string).
+   - Limitation: due to circular dependencies, the basic data types are not Show. There exists, however, a `show` method that takes any of them and returns a `hsString` (string).
  - Functor, Applicative and Monad type classes.
  - Monadic List (and String wrapper)
 
