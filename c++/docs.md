@@ -90,7 +90,7 @@
 - Constructors:
   - `Maybe()`: constructs a `Maybe` without value (equivalent to Haskell's `Nothing`).
   - `Maybe(const a value)`: constructs a `Maybe` with the given value (equivalent to Haskell's `Just`).
-- Member functions
+- Member functions:
   - `Maybe<b> fmap_impl(const std::function<b(a)> f) const`: if there is a value, applies the function to it (requirement from `Functor<Maybe, a>`).
   - `Maybe<b> ap_impl(const Maybe<std::function<b(a)>> &func) const`: if there is a function given, `fmap` that function over this `Maybe` (requirement from `Applicative<Maybe, a>`).
   - `Maybe<b> bind_impl(const std::function<Maybe<b>(a)> f) const`: if there is a value, returns the function's return value (requirement from `Monad<Maybe, a>`).
@@ -100,13 +100,30 @@
 - Static functions:
   - `static Maybe<a> pure(a val)`: wraps the given value in a `Maybe` (requirement from `Applicative<Maybe, a>`).
 
+*`class Either : public Monad<Either, a, e>`:* (monadic either/union type) ![either.hpp]
+- Constructors:
+  - `Either(a value)`: initialize with the "success" value (equivalent to Haskell's `Right`).
+  - `Either(e error)`: initialize with the "error" value (equivalent to Haskell's `Left`).
+  - `Either(const Either<a, e> &other)`: copy another `Either<a, e>` value.
+- Member functions:
+  - `Either<b, e> fmap_impl(const std::function<b(a)> f) const`: if the value is a success value, applies the given function to it (requirement from `Functor<Either, a, e>`).
+  - `Either<b, e> ap_impl(const Either<std::function<b(a)>, e> &func) const`: if the function is not an error value, `fmap` that value over this `Either` (requirement from `Applicative<Either, a, e>`).
+  - `Either<b, e> bind_impl(const std::function<Either<b, e>(a)> f) const`: if the value is a success value, returns the function's return value (requirement from `Monad<Either, a, e>`).
+- Member fields:
+  - `const union v_type { const a val; const e err; }`: the "success"/"error" union.
+  - `const bool isError`: `true` if the value is an "error" value, otherwise `false`.
+- Member types:
+  - `union v_type`: the value/error union type. Usage outside of the `Either<a, e>` class is undefined behavior.
+- Static functions:
+  - `static Either<a, e> pure(a val)`: wraps the given value as a "success" in an `Either` (requirement from `Applicative<Either, a, e>`).
+
 #### List types
 *`class List : public Monad<List, a>`:* (monadic list type) ![list.hpp]
 - Constructors:
   - `List()`: constructs an empty `List` (equivalent to Haskell's `[]`).
   - `List(const a value, const List<a> next)`: constructs a `List` by pre-pending a value to a copy of another `List` (equivalent to Haskell's `:`).
   - `List(const List<a> &other)`: copies another `List`
-- Member functions
+- Member functions:
   - `List<b> fmap_impl(const std::function<b(a)> f) const`: applies the given function to each element of the list (requirement from `Functor<List, a>`).
   - `List<b> ap_impl(const List<std::function<b(a)>> &func) const`: applies each of the functions to each of the elements of the list (requirement from `Applicative<List, a>`).
   - `List<b> bind_impl(const std::function<List<b>(a)> &f) const`: flattens the result of `fmap` over this list, using the supplied function.
@@ -199,3 +216,4 @@ Converts the given `hsChar` to a `hsString`.
 [string.hpp]: https://img.shields.io/badge/header-string.hpp-informational
 [_show_basic.hpp]: https://img.shields.io/badge/header-__show__basic.hpp-informational
 [maybe.hpp]: https://img.shields.io/badge/header-maybe.hpp-informational
+[either.hpp]: https://img.shields.io/badge/header-either.hpp-informational

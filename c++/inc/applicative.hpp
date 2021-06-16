@@ -7,7 +7,7 @@
 
 namespace hscpp {
   template <template <typename, typename ...> typename Self, typename a, typename ... rest>
-  class Applicative : public Functor<Self, a> {
+  class Applicative : public Functor<Self, a, rest ...> {
   public:
     static Self<a, rest ...> pure(a val) { return Self<a, rest ...>::pure(val); }
 

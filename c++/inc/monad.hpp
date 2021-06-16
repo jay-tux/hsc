@@ -6,7 +6,7 @@
 
 namespace hscpp {
   template <template <typename, typename ...> typename Self, typename a, typename ... rest>
-  class Monad : public Applicative<Self, a> {
+  class Monad : public Applicative<Self, a, rest ...> {
   public:
     Self<a, rest ...> ret(a val) { return Self<a, rest ...>::pure(val); }
 
