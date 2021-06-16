@@ -22,7 +22,7 @@ tests:
 
 runtests:
 	$(MAKE) tests
-	$(TESTDIR)/bin/all
+	export LD_LIBRARY_PATH=$(PWD)/lib/; test/bin/all
 
 clean:
 	rm -f lib/*

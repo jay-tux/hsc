@@ -5,3 +5,4 @@
 #include "list.hpp"
 #include "string.hpp"
 #include "showread.hpp"
+#include "_show_basic.hpp"
