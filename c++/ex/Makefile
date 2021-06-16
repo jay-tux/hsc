@@ -2,7 +2,7 @@ CC=g++
 MAKE=make
 CCARGS=-Wall -Wextra -pedantic -g -I ../inc/ -std=c++17
 LDARGS=-L../lib/ -l hsc++
-EXAMPLES=list
+EXAMPLES=list maybe
 
 all: ../lib/libhsc++.so $(EXAMPLES:%=bin/%)
 

@@ -34,6 +34,8 @@ namespace hscpp {
       return value ? append(f(*value), next->bind_impl(f)) : List<b>();
     }
 
+    static List<a> pure(a val) { return List<a>(val, List<a>()); }
+
     ~List() { delete next; }
 
     const std::optional<a> value;

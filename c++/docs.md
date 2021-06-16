@@ -6,7 +6,8 @@
  - [Quick links](./docs.md#quick-links)
  - [Types](./docs.md#types)
    - [Basic data type wrappers](./docs.md#basic-data-type-wrappers)
-   - [List types](./docs.md#list-types)
+   - [Monadic types](./docs.md#monadic-types)
+     - [List types](./docs.md#list-types)
  - [Type classes](./docs.md#type-classes)
  - [Free functions](./docs.md#free-functions)
 
@@ -84,7 +85,22 @@
   - `hsChar &operator=(char v)`: changes the wrapped value [candidate for removal].
   - `operator char() const`: extracts the wrapped value.
 
-### List types
+### Monadic types
+*`class Maybe : public Monad<Maybe, a>`* (monadic maybe/std::optional type) ![maybe.hpp]
+- Constructors:
+  - `Maybe()`: constructs a `Maybe` without value (equivalent to Haskell's `Nothing`).
+  - `Maybe(const a value)`: constructs a `Maybe` with the given value (equivalent to Haskell's `Just`).
+- Member functions
+  - `Maybe<b> fmap_impl(const std::function<b(a)> f) const`: if there is a value, applies the function to it (requirement from `Functor<Maybe, a>`).
+  - `Maybe<b> ap_impl(const Maybe<std::function<b(a)>> &func) const`: if there is a function given, `fmap` that function over this `Maybe` (requirement from `Applicative<Maybe, a>`).
+  - `Maybe<b> bind_impl(const std::function<Maybe<b>(a)> f) const`: if there is a value, returns the function's return value (requirement from `Monad<Maybe, a>`).
+- Member fields:
+  - `const std::optional<a> value`: the value, if any.
+- Member types: none
+- Static functions:
+  - `static Maybe<a> pure(a val)`: wraps the given value in a `Maybe` (requirement from `Applicative<Maybe, a>`).
+
+#### List types
 *`class List : public Monad<List, a>`:* (monadic list type) ![list.hpp]
 - Constructors:
   - `List()`: constructs an empty `List` (equivalent to Haskell's `[]`).
@@ -100,6 +116,7 @@
 - Member types: none
 - Static functions:
   - `static List<a> append(const List<a> one, const List<a> other)`: appends two lists, creating a new one.
+  - `static List<a> pure(a val)`: creates a singleton `List` from the given value (requirement from `Applicative<List, a>`).
 - Operators: none
 
 *`class hsString : public List<hsChar>, public Show`* (monadic string type) ![string.hpp]
@@ -181,3 +198,4 @@ Converts the given `hsChar` to a `hsString`.
 [list.hpp]: https://img.shields.io/badge/header-list.hpp-informational
 [string.hpp]: https://img.shields.io/badge/header-string.hpp-informational
 [_show_basic.hpp]: https://img.shields.io/badge/header-__show__basic.hpp-informational
+[maybe.hpp]: https://img.shields.io/badge/header-maybe.hpp-informational

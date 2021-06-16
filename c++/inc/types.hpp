@@ -7,6 +7,8 @@ namespace hscpp {
   struct hsChar;
 }
 
+#include <functional>
+
 #define hsWrapType(NAME, OGTYPE) struct NAME {\
   OGTYPE value;\
   NAME(OGTYPE value);\
@@ -21,6 +23,13 @@ namespace hscpp {
   hsWrapType(hsFloat, float);
   hsWrapType(hsDouble, double);
   hsWrapType(hsChar, char);
+
+  template <typename TOut, typename TIn0, typename ... TIn>
+  std::function<TOut(TIn ...)> curry(const std::function<TOut(TIn0, TIn ...)> f, const TIn0 val) {
+    return [f, val](TIn ... args) {
+      return f(val, args ...);
+    };
+  }
 }
 
 #undef hsWrapType
