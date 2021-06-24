@@ -99,6 +99,8 @@
 - Member types: none
 - Static functions:
   - `static Maybe<a> pure(a val)`: wraps the given value in a `Maybe` (requirement from `Applicative<Maybe, a>`).
+- Alternative version: `class Maybe : public Monad<Maybe, a>, public Show` when `std::enable_if_t<std::is_base_of_v<Show, a>>`
+  - `hsString show() const override`: converts this `Maybe` value to a string representation.
 
 *`class Either : public Monad<Either, a, e>`:* (monadic either/union type) ![either.hpp]
 - Constructors:
@@ -116,6 +118,8 @@
   - `union v_type`: the value/error union type. Usage outside of the `Either<a, e>` class is undefined behavior.
 - Static functions:
   - `static Either<a, e> pure(a val)`: wraps the given value as a "success" in an `Either` (requirement from `Applicative<Either, a, e>`).
+- Alternative version: `class Either : public Monad<Either, a, e>, public Show` when `std::enable_if_t<std::conjunction_v<std::is_base_of_v<Show, a>, std::is_base_of_v<Show, e>>>`
+  - `hsString show() const override`: converts this `Either` value to a string representation.
 
 #### List types
 *`class List : public Monad<List, a>`:* (monadic list type) ![list.hpp]

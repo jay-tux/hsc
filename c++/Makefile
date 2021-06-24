@@ -5,14 +5,8 @@ LDARGS=-shared
 SRCS=$(shell find src/ -name '*.cpp')
 OBJS=$(SRCS:src/%.cpp=obj/%.o)
 DEPS=$(OBJS:.o=.d)
--include $(DEPS)
 
 all: lib/libhsc++.so
-
-empty:
-	@echo $(SRCS)
-	@echo $(OBJS)
-	@echo $(DEPS)
 
 examples:
 	$(MAKE) -C ex/
@@ -36,6 +30,7 @@ install: lib/libhsc++.so
 lib/libhsc++.so: $(OBJS)
 	$(CC) $(OBJS) $(LDARGS) -o $@
 
+-include $(DEPS)
 obj/%.o: src/%.cpp Makefile
 	$(CC) $(CCARGS) $< -o $@
 

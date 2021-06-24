@@ -20,7 +20,10 @@ HSC++ uses GNU Make/G++ for compilation and compiles down to a shared library (`
    - Limitation: due to circular dependencies, the basic data types are not Show. There exists, however, a `show` method that takes any of them and returns a `hsString` (string).
  - Functor, Applicative and Monad type classes.
  - Monadic List (and String wrapper)
- - Maybe monad
+   - Limitation: due to circular dependencies (partial classes), `List<a>` is not Show, even if `a` is.
+ - Maybe monad (which is conditionally Show: if `a : Show`, then `Maybe<a> : Show`).
+ - Either monad (which is conditionally Show: if `a : Show` and `e : Show`, then `Either<a, e> : Show`)
+   - Limitation: `a` and `e` can't name the same type (due to the use of unions).
 
 **Makefile targets:**  
  - In `c++/Makefile`:

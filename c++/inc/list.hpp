@@ -6,7 +6,7 @@
 #include <functional>
 
 namespace hscpp {
-  template <typename a>
+  template <typename a, typename = void>
   class List : public Monad<List, a> {
   public:
     List() : value{std::nullopt}, next{nullptr} {}

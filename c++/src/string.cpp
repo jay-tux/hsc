@@ -27,3 +27,24 @@ std::ostream &operator<<(std::ostream &strm, const hscpp::hsString string) {
   }
   return strm;
 }
+
+hsString operator+(const hsString s1, const hsString s2) {
+  return hsString::fromList(List<hsChar>::append(s1, s2));
+}
+
+hsString operator+(const hsString s1, const std::string s2) {
+  return hsString::fromList(List<hsChar>::append(s1, hsString::fromString(s2)));
+}
+
+hsString operator+(const std::string s1, const hsString s2) {
+  return hsString::fromList(List<hsChar>::append(hsString::fromString(s1), s2));
+}
+
+cppString::cppString() : value{""} {}
+cppString::cppString(std::string s) : value{s} {}
+hsString cppString::show() const { return hsString::fromString(value); }
+
+cppString operator+(const cppString s1, const cppString s2) { return cppString(s1.value + s2.value); }
+cppString operator+(const cppString s1, const std::string s2) { return cppString(s1.value + s2); }
+cppString operator+(const std::string s1, const cppString s2) { return cppString(s1 + s2.value); }
+std::ostream &operator<<(std::ostream &strm, const cppString string) { return strm << string; }

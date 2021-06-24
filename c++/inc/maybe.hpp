@@ -2,11 +2,12 @@
 #define _HSCPP_MAYBE
 
 #include "monad.hpp"
+#include "showread.hpp"
 #include <optional>
 #include <functional>
 
 namespace hscpp {
-  template <typename a>
+  template <typename a, typename = void>
   class Maybe : public Monad<Maybe, a> {
   public:
     Maybe() : value{std::nullopt} {}
@@ -29,7 +30,20 @@ namespace hscpp {
 
     static Maybe<a> pure(a val) { return Maybe<a>(val); }
 
-    operator bool() { return (bool)value; }
+    operator bool() const { return (bool)value; }
+
+    const std::optional<a> value;
+  };
+
+  template <typename a>
+  class Maybe<a, std::enable_if_t<std::is_base_of_v<Show, a>>> : public Show {
+  public:
+    Maybe() : value{std::nullopt} {}
+    Maybe(const a value) : value{value} {}
+
+    hsString show() const override {
+      return (value) ? value.value().show() : hsString::fromString("Nothing");
+    }
 
     const std::optional<a> value;
   };
