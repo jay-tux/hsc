@@ -8,3 +8,4 @@
 #include "_show_basic.hpp"
 #include "maybe.hpp"
 #include "either.hpp"
+#include "prelude_typeclasses.hpp"

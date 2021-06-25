@@ -8,81 +8,99 @@
    - [Basic data type wrappers](./docs.md#basic-data-type-wrappers)
    - [Monadic types](./docs.md#monadic-types)
      - [List types](./docs.md#list-types)
+   - [Other types](./docs.md#other-types)
  - [Type classes](./docs.md#type-classes)
  - [Free functions](./docs.md#free-functions)
 
 ## Types
 ### Basic data type wrappers
-*`struct hsInt`:* ![types.hpp]
+*`struct hsInt : Eq<hsInt>`:* ![types.hpp]
 - Constructors:
  - `hsInt(int value)`: wraps an `int`.
-- Member functions: none
+- Member functions:
+  - `bool eq(const hsInt other) const`: compares two values for equality.
 - Member fields:
- - `int value`: the wrapped value.
+ - `const int value`: the wrapped value.
 - Member types: none
 - Static functions: none
 - Operators:
- - `hsInt &operator=(int v)`: changes the wrapped value [candidate for removal].
  - `operator int() const`: extracts the wrapped value.
+ - `hsInt operator+(const hsInt other) const`: adds two values together.
+ - `hsInt operator-(const hsInt other) const`: subtracts the argument from this value, returning a new value.
+ - `hsInt operator*(const hsInt other) const`: multiplies two values.
+ - `hsInt operator/(const hsInt other) const`: divides this value by the argument, returning a new value.
 
-*`struct hsInteger`:* ![types.hpp]
+*`struct hsInteger : Eq<hsInteger>`:* ![types.hpp]
 - Constructors:
   - `hsInt(long value)`: wraps a `long`.
-- Member functions: none
+- Member functions:
+  - `bool eq(const hsInteger other) const`: compares two values for equality.
 - Member fields:
-  - `long value`: the wrapped value.
+  - `const long value`: the wrapped value.
 - Member types: none
 - Static functions: none
 - Operators:
-  - `hsInteger &operator=(long v)`: changes the wrapped value [candidate for removal].
   - `operator long() const`: extracts the wrapped value.
+  - `hsInteger operator+(const hsInteger other) const`: adds two values together.
+  - `hsInteger operator-(const hsInteger other) const`: subtracts the argument from this value, returning a new value.
+  - `hsInteger operator*(const hsInteger other) const`: multiplies two values.
+  - `hsInteger operator/(const hsInteger other) const`: divides this value by the argument, returning a new value.
 
-*`struct hsBool`:* ![types.hpp]
+*`struct hsBool : Eq<hsBool>`:* ![types.hpp]
 - Constructors:
  - `hsBool(bool value)`: wraps a `bool`.
-- Member functions: none
+- Member functions:
+  - `bool eq(const hsBool other) const`: compares two values for equality.
 - Member fields:
- - `bool value`: the wrapped value.
+ - `const bool value`: the wrapped value.
 - Member types: none
 - Static functions: none
 - Operators:
- - `hsBool &operator=(bool v)`: changes the wrapped value [candidate for removal].
  - `operator bool() const`: extracts the wrapped value.
+ - `hsBool operator!() const`: returns an inverted boolean value.
 
-*`struct hsFloat`:* ![types.hpp]
+*`struct hsFloat : Eq<hsFloat>`:* ![types.hpp]
 - Constructors:
   - `hsFloat(float value)`: wraps a `float`.
-- Member functions: none
+- Member functions:
+  - `bool eq(const hsFloat other) const`: compares two values for equality.
 - Member fields:
-  - `float value`: the wrapped value.
+  - `const float value`: the wrapped value.
 - Member types: none
 - Static functions: none
 - Operators:
-  - `hsFloat &operator=(float v)`: changes the wrapped value [candidate for removal].
   - `operator float() const`: extracts the wrapped value.
+  - `hsFloat operator+(const hsFloat other) const`: adds two values together.
+  - `hsFloat operator-(const hsFloat other) const`: subtracts the argument from this value, returning a new value.
+  - `hsFloat operator*(const hsFloat other) const`: multiplies two values.
+  - `hsFloat operator/(const hsFloat other) const`: divides this value by the argument, returning a new value.
 
-*`struct hsDouble`:* ![types.hpp]
+*`struct hsDouble : Eq<hsDouble>`:* ![types.hpp]
 - Constructors:
   - `hsDouble(double value)`: wraps a `double`.
-- Member functions: none
+- Member functions:
+  - `bool eq(const hsDouble other) const`: compares two values for equality.
 - Member fields:
-  - `double value`: the wrapped value.
+  - `const double value`: the wrapped value.
 - Member types: none
 - Static functions: none
 - Operators:
-  - `hsDouble &operator=(double v)`: changes the wrapped value [candidate for removal].
   - `operator double() const`: extracts the wrapped value.
+  - `hsDouble operator+(const hsDouble other) const`: adds two values together.
+  - `hsDouble operator-(const hsDouble other) const`: subtracts the argument from this value, returning a new value.
+  - `hsDouble operator*(const hsDouble other) const`: multiplies two values.
+  - `hsDouble operator/(const hsDouble other) const`: divides this value by the argument, returning a new value.
 
-*`struct hsChar`:* ![types.hpp]
+*`struct hsChar : Eq<hsChar>`:* ![types.hpp]
 - Constructors:
   - `hsChar(char value)`: wraps a `char`.
-- Member functions: none
+- Member functions:
+  - `bool eq(const hsChar other) const`: compares two values for equality.
 - Member fields:
-  - `char value`: the wrapped value.
+  - `const char value`: the wrapped value.
 - Member types: none
 - Static functions: none
 - Operators:
-  - `hsChar &operator=(char v)`: changes the wrapped value [candidate for removal].
   - `operator char() const`: extracts the wrapped value.
 
 ### Monadic types
@@ -154,6 +172,27 @@
 - Operators:
   - `std::ostream &operator<<(std::ostream &strm, const hsString string)`: writes a `hsString` to an `ostream` [candidate for removal].
 
+### Other types
+*`struct Ordering : public Ord<Ordering>, public Bounded<Ordering>, public Enum<Ordering>`* (ordering type) ![prelude_typeclasses.hpp]
+- Constructors:
+  - `Ordering(const order_t v)`: wraps the order enum value.
+  - `static const Ordering LT`: less-than value.
+  - `static const Ordering EQ`: equal value.
+  - `static const Ordering GT`: greater-than value.
+- Member functions:
+  - `bool eq(const Ordering &other) const`: compares both Orderings for equality, returning true on equality.
+  - `Ordering cmp(const Ordering &other) const`: compares both Orderings using the rule `LT < EQ < GT`.
+- Member fields:
+  - `const order_t value`: the order enum value.
+- Member types: none
+- Static functions:
+  - `static Ordering minBound()`: returns the lower bound of the Ordering.
+  - `static Ordering maxBound()`: returns the upper bound of the Ordering.
+  - `static Ordering to(const hsInt &value)`: returns the n-th value in the Enum.
+  - `static hsInt from(const Ordering &value)`: returns the index of this Enum value.
+- Operators:
+  - `operator order_t() const`: unwraps the order enum value.
+
 ## Type classes
 All the type classes are simply abstract classes. Many type classes use the CRTP pattern to enforce templated methods or static methods on derived classes. The inheritance requirements imply that the type class derives from another type class.
 
@@ -191,6 +230,46 @@ All the type classes are simply abstract classes. Many type classes use the CRTP
   - `static Self<a, rest ...> ret(a val)`: Wraps a value in the Monad.
   - `Self<b, rest ...> bind(const std::function<Self<b, rest ...>(a)> f)`: Composes two actions
 
+*`template <typename Self> class Bounded`* ![prelude_typeclasses.hpp]
+- Implementation requirements:
+  - `Self` should contain `static Self minBound()`.
+  - `Self` should contain `static Self maxBound()`.
+- Own functions:
+  - `static Self minBound()`: Returns the lower bound of the type.
+  - `static Self maxBound()`: Returns the upper bound of the type.
+
+*`template <typename Self> class Eq`* ![prelude_typeclasses.hpp]
+- Implementation requirements:
+  - `Self` should contain `hsBool eq(const Self other) const`.
+- Own functions: none
+- Own operators:
+  - `const bool operator==(const Eq<Self> one, const Eq<Self> other)`: Compares two values for equality, returning true on equality.
+  - `const bool operator!=(const Eq<Self> one, const Eq<Self> other)`: Compares two values for equality, returning true on difference.
+
+*`template <typename Self> class Ord`* ![prelude_typeclasses.hpp]
+- Implementation requirements:
+  - `Self` should inherit from `Eq<Self>`.
+  - `Self` should contain `Ordering cmp(const Self other) const`.
+- Own functions:
+  - `static const Ordering &compare(const Self one, const Self other)`: Compares two values, and returns the ordering of them.
+  - `static const Self min(const Self one, const Self other)`: Returns the smaller of two values.
+  - `static const Self max(const Self one, const Self other)`: Returns the larger of two values.
+- Own operators:
+  - `const bool operator<(const Ord<Self> one, const Ord<Self> other)`: Returns true if `one` is smaller than `other`, false otherwise.
+  - `const bool operator>(const Ord<Self> one, const Ord<Self> other)`: Returns true if `one` is larger than `other`, false otherwise.
+  - `const bool operator<=(const Ord<Self> one, const Ord<Self> other)`: Returns true if `one` is not larger than `other`, false otherwise.
+  - `const bool operator>=(const Ord<Self> one, const Ord<Self> other)`: Returns true if `one` is not smaller than `other`, false otherwise.
+
+*`template <typename Self> class Enum`* ![prelude_typeclasses.hpp]
+- Implementation requirements:
+  - `Self` should contain `static Self to(const hsInt &value)`.
+  - `Self` should contain `static hsInt from(const Self &value)`.
+- Own functions:
+  - `static Self toEnum(const hsInt &value)`: Returns the n-th value in the Enum.
+  - `const hsInt &fromEnum() const`: Returns the index of this value in the Enum.
+  - `const Self succ() const`: Returns the next value in the Enum.
+  - `const Self pred() const`: Returns the previous value in the Enum.
+
 ## Free functions
 *`hsString show(hsInt val):`* ![_show_basic.hpp]  
 Converts the given `hsInt` to a `hsString`.
@@ -221,3 +300,4 @@ Converts the given `hsChar` to a `hsString`.
 [_show_basic.hpp]: https://img.shields.io/badge/header-__show__basic.hpp-informational
 [maybe.hpp]: https://img.shields.io/badge/header-maybe.hpp-informational
 [either.hpp]: https://img.shields.io/badge/header-either.hpp-informational
+[prelude_typeclasses.hpp]: https://img.shields.io/badge/header-prelude_typeclasses.hpp-informational

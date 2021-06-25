@@ -24,6 +24,8 @@ HSC++ uses GNU Make/G++ for compilation and compiles down to a shared library (`
  - Maybe monad (which is conditionally Show: if `a : Show`, then `Maybe<a> : Show`).
  - Either monad (which is conditionally Show: if `a : Show` and `e : Show`, then `Either<a, e> : Show`)
    - Limitation: `a` and `e` can't name the same type (due to the use of unions).
+ - `Eq`, `Ord`, `Enum`, `Bounded` type classes
+   - Limitation: `Enum` only has the to & from enum, along with succ and pred.
 
 **Makefile targets:**  
  - In `c++/Makefile`:
