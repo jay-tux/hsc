@@ -43,3 +43,5 @@ HSC++ uses GNU Make/G++ for compilation and compiles down to a shared library (`
 
 **Examples:**
  - `c++/ex/bin/list`: Simple example showing the monadic List.
+ - `c++/ex/bin/either`: Simple example showing the Either monad.
+ - `c++/ex/bin/maybe`: Simple example showing the Maybe monad.
